@@ -51,6 +51,7 @@ void isNotFav(){
 
  List<Product> get favourieProductsList{
    if (_isFav.value) {
+     print(loadedProducts.where((element) => element.isFavourite.value).toList());
      return loadedProducts.where((element) => element.isFavourite.value).toList();
    }
    return loadedProducts;

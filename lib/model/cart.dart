@@ -11,4 +11,13 @@ class Cart {
     @required this.price,
     @required this.quantity});
 
+  // Map<String ,dynamic> toJson(){
+  //   return {
+  //     'id':id,
+  //     'title':title,
+  //     'price':price,
+  //     'quantity':quantity,
+  //   };
+  // }
+
 }
