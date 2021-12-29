@@ -37,6 +37,25 @@ static ProductsController get productGetter=>Get.find<ProductsController>();
   Product findById(String? id){
     return loadedProducts.firstWhere((element) => element.id==id);
   }
+  RxBool _isFav=false.obs;
+
+  void isFav(){
+    _isFav.value=true;
+    update();
+  }
+
+void isNotFav(){
+  _isFav.value=false;
+  update();
+}
+
+ List<Product> get favourieProductsList{
+   if (_isFav.value) {
+     return loadedProducts.where((element) => element.isFavourite.value).toList();
+   }
+   return loadedProducts;
+
+}
 
 
 

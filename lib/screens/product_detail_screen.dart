@@ -12,7 +12,7 @@ class ProductDetailScreen extends StatelessWidget {
    // final loadedProduct=proController.loadedProducts.firstWhere((element) =>element.id==productID);
     //find product by id third method;
     final loadedProduct=proController.findById(productID);
-    print('build prodetailscreen');
+    print(loadedProduct.id);
 
     return Scaffold(
       appBar: AppBar(
