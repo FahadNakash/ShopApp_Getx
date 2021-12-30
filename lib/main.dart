@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shopapp_getx/screens/cart_screen.dart';
 import '/controller/cart_controller.dart';
 import 'controller/products_controller.dart';
 import 'screens/product_overview_screen.dart';
 import 'screens/product_detail_screen.dart';
+import 'screens/cart_screen.dart';
 void main() {
   Get.put(CartController());
   Get.put(ProductsController());
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
       home: ProductOverViewScreen(),
       getPages: [
         GetPage(name: '/product_detail_screen', page: ()=>ProductDetailScreen()),
+        GetPage(name: '/cart_screen', page: ()=>CartScreen()),
       ],
     );
   }

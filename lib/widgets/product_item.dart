@@ -47,7 +47,7 @@ final cartController=CartController.cartGetter;
                   color: Theme.of(context).accentColor),
             ),
           ),
-        ));;
+        ));
   }
 }
 

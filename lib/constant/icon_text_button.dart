@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controller/cart_controller.dart';
 class TextIconButton extends StatelessWidget {
-  final Function onPressed;
+  final Function() onPressed;
   final String title;
   TextIconButton(this.title,this.onPressed);
   @override
@@ -11,7 +11,7 @@ class TextIconButton extends StatelessWidget {
     return Center(
       child: Stack(
         children: [
-          IconButton(icon: Icon(Icons.card_travel_outlined),onPressed: (){},),
+          IconButton(icon: Icon(Icons.card_travel_outlined),onPressed: onPressed,),
           Positioned(
             bottom: 5,
             right: 10,

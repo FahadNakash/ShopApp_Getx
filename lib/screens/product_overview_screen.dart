@@ -5,6 +5,7 @@ import '../widgets/product_item.dart';
 import '../controller/products_controller.dart';
 import '../constant/icon_text_button.dart';
 import '../controller/cart_controller.dart';
+import '../screens/cart_screen.dart';
  enum FilterOptions{
   IsFavorite,
   All,
@@ -21,6 +22,7 @@ class ProductOverViewScreen extends StatelessWidget {
         title: Text('HomeScreen'),
         actions: [
           Obx(()=>TextIconButton(cartController.cartItems.value.length.toString(),(){
+            Get.to(CartScreen(),duration: Duration(milliseconds: 900),);
           }),),
           PopupMenuButton(
             itemBuilder: (_)=>[

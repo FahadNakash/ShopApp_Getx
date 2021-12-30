@@ -7,16 +7,28 @@ class CartController extends GetxController{
   RxMap cartItems=<String,Cart>{}.obs;
 
   void addItemsToCart(String proid,String title,double price){
+    print(cartItems.value);
    // cartItems.value.values.toList().forEach((element) {print(element.title);});
-    if (cartItems.value.containsKey(proid)) {
+    Map<String,Cart> temp=Map.from(cartItems.value);
+    if (temp.containsKey(proid)) {
       print('exist');
-      cartItems.value.update(proid, (existingvalue) => Cart(id: existingvalue.id, title: existingvalue.title, price: existingvalue.price, quantity:existingvalue.quantity+1 ));
+      temp.update(proid, (existingvalue) => Cart(id: existingvalue.id, title: existingvalue.title, price: existingvalue.price, quantity:(existingvalue.quantity??0)+1 ));
+      cartItems.value=temp;
       //add quantity
     }else{
       print('new add');
-      cartItems.value.putIfAbsent(proid, () => Cart(id: DateTime.now().toString(), title: title, price: price,quantity: 1));
+      temp.putIfAbsent(proid, () => Cart(id: DateTime.now().toString(), title: title, price: price,quantity: 1));
+      cartItems.value=temp;
       Get.snackbar('Items added', 'Yours Product add Successfully',duration: Duration(seconds: 1),snackPosition:SnackPosition.BOTTOM);
-
     }
   }
+
+  double get totalPrice{
+    double total=0;
+    cartItems.value.forEach((key, cartItem) {
+      total =total+cartItem.price*cartItem.quantity;
+    });
+    return total;
+  }
+
 }
