@@ -1,5 +1,3 @@
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopapp_getx/model/cart.dart';
 class CartController extends GetxController{
@@ -7,7 +5,6 @@ class CartController extends GetxController{
   RxMap cartItems=<String,Cart>{}.obs;
 
   void addItemsToCart(String proid,String title,double price){
-    print(cartItems.value);
    // cartItems.value.values.toList().forEach((element) {print(element.title);});
     Map<String,Cart> temp=Map.from(cartItems.value);
     if (temp.containsKey(proid)) {
@@ -30,5 +27,9 @@ class CartController extends GetxController{
     });
     return total;
   }
+  void deleteCartItems(String id){
+    cartItems.remove(id);
+  }
+
 
 }

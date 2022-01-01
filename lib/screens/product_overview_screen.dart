@@ -6,6 +6,7 @@ import '../controller/products_controller.dart';
 import '../constant/icon_text_button.dart';
 import '../controller/cart_controller.dart';
 import '../screens/cart_screen.dart';
+import '../widgets/app_drawer.dart';
  enum FilterOptions{
   IsFavorite,
   All,
@@ -40,6 +41,7 @@ class ProductOverViewScreen extends StatelessWidget {
           ),
         ],
       ),
+      drawer: AppDrawer(),
       body:GridView.builder(
           padding: EdgeInsets.all(7),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -50,7 +52,7 @@ class ProductOverViewScreen extends StatelessWidget {
           ),
           itemCount: data.length,
           itemBuilder:(BuildContext,index){
-            return ProductItem(data,index);
+            return Hero(tag: UniqueKey(), child: ProductItem(data,index));
           } ,
         ),
       );
