@@ -4,8 +4,8 @@ import '../model/cart.dart';
 import '../controller/cart_controller.dart';
 class CartItems extends StatelessWidget {
   final Cart cartdata;
-  final String keys;
-  CartItems(this.cartdata,this.keys);
+  final String productid;
+  CartItems(this.cartdata,this.productid);
   @override
   Widget build(BuildContext context) {
     final cartController=CartController.cartGetter;
@@ -20,7 +20,7 @@ class CartItems extends StatelessWidget {
       ),
       direction:DismissDirection.endToStart,
       onDismissed: (direction){
-        cartController.deleteCartItems(keys);
+        cartController.deleteCartItems(productid);
       },
       child: Card(
         margin: EdgeInsets.all(10),
@@ -28,7 +28,7 @@ class CartItems extends StatelessWidget {
           padding: EdgeInsets.all(10),
           child:  ListTile(
             leading: CircleAvatar(
-              child: FittedBox(child: Text('\$${cartdata.price}'))
+              child: FittedBox(child: Text('\$${cartdata.price}')),
             ),
             title: Text('${cartdata.title}',style: TextStyle(fontWeight: FontWeight.bold),),
             subtitle: Text('Total:\$${(cartdata.price!.toDouble()*cartdata.quantity!.toInt())}'),

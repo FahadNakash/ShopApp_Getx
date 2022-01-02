@@ -7,7 +7,6 @@ class TextIconButton extends StatelessWidget {
   TextIconButton(this.title,this.onPressed);
   @override
   Widget build(BuildContext context) {
-    final cartController=CartController.cartGetter;
     return Center(
       child: Stack(
         children: [

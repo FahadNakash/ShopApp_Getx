@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
       ),
       home: ProductOverViewScreen(),
       getPages: [
+        GetPage(name: '/product_overview_screen', page: ()=>ProductOverViewScreen()),
         GetPage(name: '/product_detail_screen', page: ()=>ProductDetailScreen()),
         GetPage(name: '/cart_screen', page: ()=>CartScreen()),
         GetPage(name: '/order_screen', page: ()=>OrderScreen()),

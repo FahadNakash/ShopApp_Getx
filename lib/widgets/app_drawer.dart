@@ -18,7 +18,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.shop),
             title: Text('Shop'),
             onTap: (){
-              Get.toNamed('/product_detail_screen');
+              Get.toNamed('/product_overview_screen');
               // Get.to(()=>ProductOverViewScreen(),duration: Duration(milliseconds: 900));
             },
           ),

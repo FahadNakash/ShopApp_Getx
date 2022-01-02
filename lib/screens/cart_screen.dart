@@ -4,21 +4,27 @@ import '../controller/order_controller.dart';
 import '../controller/cart_controller.dart';
 import '../widgets/cart_items.dart';
 import '../model/cart.dart';
-
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final cartController = CartController.cartGetter;
     final orderController = OrderController.orderGetter;
-    // print(cartController.cartItems.runtimeType);
-    final List<Cart> cartObjects =
+   // print(cartController.cartItems.value);
+    final Map<String,Cart> cartData=cartController.cartItems.value as Map<String,Cart>;
+ //   print(cartData);
+    // print(cartController.cartItems.value);
+    final List<Cart> cartObjects =cartController.cartItems.value.values.toList() as List<Cart>;  //list of objects
     // cartController.cartItems.value.values.toList()//this line show error list<dynamic cannt assign List<Cart>
-    cartController.cartItems.value.values.toList() as List<Cart>;  //list of objects
-    // print(cartObjects);
-    final cartKeys =
-        cartController.cartItems.value.keys.toList(); //list of keys
-    // print(cartKeys);
+    //print(cartObjects[0].title);
+    final  cartKeys = cartController.cartItems.value.keys.toList();                             //list of keys
+     // print(cartKeys[2]);
+    // print(cartController.cartItems.value.length);
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Cart'),
@@ -43,7 +49,7 @@ class CartScreen extends StatelessWidget {
                   Chip(
                     label: Obx(
                       () => Text(
-                        cartController.totalPrice.toStringAsFixed(2).toString(),
+                        '\$${cartController.totalPrice.toStringAsFixed(2)}',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -53,7 +59,8 @@ class CartScreen extends StatelessWidget {
                   TextButton(
                       onPressed: () {
                         orderController.addOrder(cartObjects, cartController.totalPrice);
-                        cartController.cartItems.clear();
+                       // cartController.cartItems.clear(); // it cannot clear map,it throw an error so this not work
+                        cartController.cartItems.value=<String,Cart>{}; // clear map
                         Get.toNamed('/order_screen');
                       },
                       child: Text(
@@ -70,10 +77,12 @@ class CartScreen extends StatelessWidget {
                   itemCount: cartController.cartItems.value.length,
                   itemBuilder: (context, index) {
                     return CartItems(
-                      cartObjects[index],
-                      cartKeys[index],
+                      cartController.cartItems.value.values.toList()[index],
+                      cartController.cartItems.value.keys.toList()[index],
                     );
-                  })))
+                  })
+          )
+          )
         ],
       ),
     );
