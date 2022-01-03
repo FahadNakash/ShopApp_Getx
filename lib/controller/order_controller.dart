@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../model/order.dart';
 import '../model/cart.dart';
 class OrderController extends GetxController{
   RxList orderItems=<Order>[].obs;
-  static OrderController get orderGetter=>Get.find<OrderController>();
+  RxBool isExpandable=false.obs;
 
+  static OrderController get orderGetter=>Get.find<OrderController>();
   void addOrder(List<Cart> cartItems,double price){
     if(cartItems.isNotEmpty){
       print('add order successfully');
