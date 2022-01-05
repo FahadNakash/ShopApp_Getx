@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../model/product.dart';
 class ProductsController extends GetxController{
 static ProductsController get productGetter=>Get.find<ProductsController>();
-
-  final List<Product> loadedProducts = [
+  final List<Product> loadedProducts =[
     Product(
       'p1',
       'Red Shirt',
@@ -49,6 +49,8 @@ static ProductsController get productGetter=>Get.find<ProductsController>();
 
 }
 
-
+void  saveForm(GlobalKey<FormState> _formkey){
+   _formkey.currentState!.save();
+}
 
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../model/cart.dart';
 import '../controller/cart_controller.dart';
+import'package:get/get.dart';
 class CartItems extends StatelessWidget {
   final Cart cartdata;
   final String productid;
@@ -18,6 +19,28 @@ class CartItems extends StatelessWidget {
         child: Icon(Icons.delete,size: 40,color: Colors.white,),
       ),
       direction:DismissDirection.endToStart,
+      confirmDismiss: (direction){
+         return Get.defaultDialog(
+           title: 'Alert',
+           middleText: 'Your are really to delete the item?',
+           actions: [
+           FlatButton(
+             shape: StadiumBorder(),
+              color: Colors.green,
+               onPressed: (){
+              cartController.deleteCartItems(productid);
+              Get.back();
+           }, child: Text('submit')),
+           FlatButton(
+             shape: StadiumBorder(),
+             color: Colors.red,
+               onPressed: (){
+           Get.back();
+           }, child: Text('denied')
+           ),
+           ]
+         );
+      },
       onDismissed: (direction){
         cartController.deleteCartItems(productid);
       },

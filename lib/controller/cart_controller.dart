@@ -16,8 +16,8 @@ class CartController extends GetxController {
               price: existingvalue.price,
               quantity: (existingvalue.quantity ?? 0) + 1));
       cartItems.value = temp;
-      Get.snackbar('Quantity  is Increase', 'Product is already added',
-          duration: Duration(milliseconds: 900), snackPosition: SnackPosition.BOTTOM,borderColor: Colors.purple,borderRadius: 10,borderWidth: 2,margin: EdgeInsets.all(10));
+      Get.snackbar('Add Quantity', 'Yours Product Quantity is Increase Successfully',duration: Duration(seconds: 2),snackPosition:SnackPosition.BOTTOM,mainButton: TextButton(onPressed: (){ removeSinglecartItem(proid); }, child: Text('Undo')),);
+      // Get.snackbar('Quantity  is Increase', 'Product is already added',duration: Duration(milliseconds: 900), snackPosition: SnackPosition.BOTTOM,borderColor: Colors.purple,borderRadius: 10,borderWidth: 2,margin: EdgeInsets.all(10));
       //add quantity
     } else {
       temp.putIfAbsent(proid,() => Cart(
@@ -27,6 +27,7 @@ class CartController extends GetxController {
               quantity: 1));
       cartItems.value = temp;
        Get.snackbar('Items added', 'Yours Product add Successfully',duration: Duration(seconds: 2),snackPosition:SnackPosition.BOTTOM,mainButton: TextButton(onPressed: (){ removeSinglecartItem(proid); }, child: Text('Undo')),);
+
     }
   }
 
@@ -40,11 +41,32 @@ class CartController extends GetxController {
 
   void deleteCartItems(String id) {
     Map<String, Cart> temp = Map.from(cartItems.value);
+    // Get.defaultDialog(
+    //   title: 'Alert',
+    //   titleStyle: TextStyle(color: Colors.red),
+    //   middleText: 'Are u really want to delete an items?',
+    //   confirm: Text('Submit'),
+    //   onConfirm: (){},
+    //     cancel: Text('Denied'),
+    //   onCancel: (){}
+    // );
     temp.remove(id);
     cartItems.value = temp;
   }
+
+
   void removeSinglecartItem(String productid){
-   cartItems.remove(productid);
+    late Map<String, Cart> temp = Map.from(cartItems.value);
+    if(!temp.containsKey(productid)){
+      return;
+    }
+    if(temp[productid]!.quantity!>1){
+      temp.update(productid, (existingproduct) => Cart(id: existingproduct.id, title: existingproduct.title, price: existingproduct.price, quantity:existingproduct.quantity!-1));
+    }else{
+      temp.remove(productid);
+    }
+    cartItems.value = temp;
+    
   }
 
 

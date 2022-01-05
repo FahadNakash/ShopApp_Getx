@@ -19,7 +19,6 @@ class ProductOverViewScreen extends StatefulWidget {
 
 class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   final proController = ProductsController.productGetter;
-
   final cartController = CartController.cartGetter;
 
   @override
