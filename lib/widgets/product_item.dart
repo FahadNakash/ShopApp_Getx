@@ -41,7 +41,12 @@ final cartController=CartController.cartGetter;
             title: FittedBox(child: Text(data[index].title)),
             trailing:IconButton(
               onPressed: () {
-              cartController.addItemsToCart(data[index].id, data[index].title, data[index].price);
+              cartController.addItemsToCart(data[index].id!, data[index].title, data[index].price);
+              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //   content: Text('items add succesfully'),
+              //   duration: Duration(milliseconds: 900),
+              //
+              // ));
               },
               icon: Icon(Icons.add_shopping_cart,
                   color: Theme.of(context).accentColor),

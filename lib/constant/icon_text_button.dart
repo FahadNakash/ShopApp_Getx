@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../controller/cart_controller.dart';
 class TextIconButton extends StatelessWidget {
   final Function() onPressed;
   final String title;

@@ -17,7 +17,7 @@ class _CartScreenState extends State<CartScreen> {
     final orderController = OrderController.orderGetter;
    // print(cartController.cartItems.value);
     final Map<String,Cart> cartData=cartController.cartItems.value as Map<String,Cart>;
- //   print(cartData);
+    print(cartData);
     // print(cartController.cartItems.value);
     final List<Cart> cartObjects =cartController.cartItems.value.values.toList() as List<Cart>;  //list of objects
     // cartController.cartItems.value.values.toList()//this line show error list<dynamic cannt assign List<Cart>

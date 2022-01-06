@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../model/order.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
+
 class OrderItems extends StatelessWidget {
   final Order orderdata;
   OrderItems(this.orderdata);
@@ -9,20 +11,25 @@ class OrderItems extends StatelessWidget {
     return  Card(
       child: ExpansionTile(
         textColor: Colors.black54,
-        title: Text('\$${orderdata.price}'),
+        title: Text('\$${orderdata.price.toStringAsFixed(2)}'),
         subtitle: Text('${DateFormat('dd MM yyyy  hh:mm').format(orderdata.date)}'),
-       children: orderdata.product.map((productData){
-         return Container(
-           padding: EdgeInsets.all(5),
-           child: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-             children: [
-               Text(productData.title.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-               Text('${productData.quantity}x \$${productData.price}')
-             ],
+       children: [
+         Container(
+           height: min(orderdata.product.length *10+20, 100),
+           child: ListView(
+              shrinkWrap: true,
+             children: orderdata.product.map((productData){
+               return Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Text(productData.title.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                   Text('${productData.quantity}x \$${productData.price}')
+                 ],
+               );
+             }).toList(),
            ),
-         );
-       }).toList()
+         )
+       ]
       ),
     );
   }

@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopapp_getx/model/product.dart';
-import '../widgets/product_item.dart';
+
 import '../controller/products_controller.dart';
 import '../constant/icon_text_button.dart';
 import '../controller/cart_controller.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/app_drawer.dart';
-
+import '../widgets/product_grid.dart';
 enum FilterOptions {
   IsFavorite,
   All,
 }
+class ProductOverViewScreen extends StatefulWidget {
+  @override
+  State<ProductOverViewScreen> createState() => _ProductOverViewScreenState();
+}
 
-class ProductOverViewScreen extends StatelessWidget {
+class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   final proController = ProductsController.productGetter;
   final cartController = CartController.cartGetter;
+
   @override
   Widget build(BuildContext context) {
-    List<Product> data = proController.loadedProducts;
+    List<Product> proData = proController.loadedProducts;
     print('build overview screen');
     return Scaffold(
       appBar: AppBar(
@@ -46,9 +51,13 @@ class ProductOverViewScreen extends StatelessWidget {
             ],
             onSelected: (FilterOptions value) {
               if (value == FilterOptions.IsFavorite) {
-                proController.isFav();
+               setState(() {
+                 proController.isFav.value=true;
+               });
               } else {
-                proController.isNotFav();
+               setState(() {
+                 proController.isFav.value=false;
+               });
               }
             },
             icon: Icon(Icons.more_vert),
@@ -56,18 +65,7 @@ class ProductOverViewScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: GridView.builder(
-        padding: EdgeInsets.all(7),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            childAspectRatio: 3 / 2,
-            crossAxisSpacing: 10),
-        itemCount: data.length,
-        itemBuilder: (BuildContext, index) {
-          return Hero(tag: UniqueKey(), child: ProductItem(data, index));
-        },
-      ),
+      body:ProductGrid(),
     );
   }
 }

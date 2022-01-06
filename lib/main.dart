@@ -8,7 +8,9 @@ import 'screens/product_overview_screen.dart';
 import 'screens/product_detail_screen.dart';
 import 'screens/cart_screen.dart';
 import 'screens/order_screen.dart';
-import 'widgets/app_drawer.dart';
+import 'screens/user_product_screen.dart';
+import 'screens/edit_product_screen.dart';
+
 void main() {
   Get.put(CartController());
   Get.put(ProductsController());
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/product_detail_screen', page: ()=>ProductDetailScreen()),
         GetPage(name: '/cart_screen', page: ()=>CartScreen()),
         GetPage(name: '/order_screen', page: ()=>OrderScreen()),
+        GetPage(name: '/user_product_screen', page:()=>UserProductScreen()),
+        GetPage(name: '/edit_product_screen', page:()=>EditProductScreen())
       ],
     );
   }
