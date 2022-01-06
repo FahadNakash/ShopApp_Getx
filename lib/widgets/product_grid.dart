@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shopapp_getx/controller/cart_controller.dart';
 import '../widgets/product_item.dart';
 import '../controller/products_controller.dart';
@@ -8,7 +9,7 @@ class ProductGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Product> proData = proController.isFav.value?proController.favourieProductsList:proController.loadedProducts;
-    return  GridView.builder(
+    return  Obx(()=>GridView.builder(
       padding: EdgeInsets.all(7),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -19,6 +20,6 @@ class ProductGrid extends StatelessWidget {
       itemBuilder: (BuildContext, index) {
         return ProductItem(proData, index);
       },
-    );
+    ));
   }
 }

@@ -1,8 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
+import 'package:http/http.dart'as http;
 import 'package:get/get.dart';
 import '../model/product.dart';
 class ProductsController extends GetxController{
 static ProductsController get productGetter=>Get.find<ProductsController>();
+
   final List<Product> loadedProducts =[
     Product(
       'p1',
@@ -34,6 +37,9 @@ static ProductsController get productGetter=>Get.find<ProductsController>();
     ),
   ].obs;
 
+
+
+
   Product findById(String? id){
     return loadedProducts.firstWhere((element) => element.id==id);
   }
@@ -48,9 +54,36 @@ static ProductsController get productGetter=>Get.find<ProductsController>();
    return loadedProducts;
 
 }
+Future<void> addNewProduct(Product product)async{
+   final url =Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
+   final response=await http.post(url,body:json.encode({
+     'title':product.title,
+     'description':product.description,
+     'price':product.price,
+     'imageUrl':product.imgUrl,
+     'isFav':product.isFavourite.value,
+   }));
+   if (response.statusCode==200) {
+     print(json.decode(response.body)['name']);
+     final newProduct=Product(json.decode(response.body)['name'],product.title, product.description,product.price,product.imgUrl,);
+     print(newProduct.id);
+     loadedProducts.add(newProduct);
+     Get.back();
+   }
 
-void  saveForm(GlobalKey<FormState> _formkey){
-   _formkey.currentState!.save();
+}
+void updateProduct(String id,Product product){
+int index=loadedProducts.indexWhere((element) => element.id==id);
+if (index>=0) {
+  loadedProducts[index]=product;
+  Get.back();
+}else{
+  print('no found');
+}
+
+}
+void deleteProduct(String id){
+   loadedProducts.removeWhere((element) => element.id==id);
 }
 
 }
