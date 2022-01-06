@@ -53,7 +53,7 @@ class CartItems extends StatelessWidget {
               child: FittedBox(child: Text('\$${cartdata.price}')),
             ),
             title: Text('${cartdata.title}',style: TextStyle(fontWeight: FontWeight.bold),),
-            subtitle: Text('Total:\$${(cartdata.price!.toDouble()*cartdata.quantity!.toInt())}'),
+            subtitle: Text('Total:\$${(cartdata.price!.toDouble()*cartdata.quantity!.toInt()).toStringAsFixed(2)}'),
             trailing: Text('${cartdata.quantity}x',style: TextStyle(fontWeight: FontWeight.bold),),
           ),
         )
