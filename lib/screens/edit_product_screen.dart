@@ -4,14 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopapp_getx/model/product.dart';
 import '../controller/products_controller.dart';
-
 class EditProductScreen extends StatefulWidget {
   const EditProductScreen({Key? key}) : super(key: key);
-
   @override
   State<EditProductScreen> createState() => _EditProductScreenState();
 }
-
 class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocus = FocusNode();
   final _description = FocusNode();
@@ -22,6 +19,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
    bool  _isFav=false;
    Product? _editedProduct=Product(null, '', '', 0, '',);
     String? id;
+     bool _isLoading=false;
     var initValue={
       'title':'',
       'description':'',
@@ -61,19 +59,42 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
     }
   }
-  void saveForm(){
+  Future<void> saveForm()async{
     _formkey.currentState!.validate();
     _formkey.currentState!.save();
+    setState(() {
+      _isLoading=true;
+    });
     if(_editedProduct!.id!=null){
       _editedProduct!.isFavourite.value=_isFav;
-      print(_editedProduct!.isFavourite.value);
-
-   proController.updateProduct(_editedProduct!.id!, _editedProduct!);
-
+    proController.updateProduct(_editedProduct!.id!, _editedProduct!);
+      setState(() {
+        _isLoading=false;
+        Get.back();
+      });
     }else {
-      proController.addNewProduct(_editedProduct!);
-    }
-  }
+     try{
+       await proController.addNewProduct(_editedProduct!);
+       Get.back();
+     }catch(error){
+      await Get.defaultDialog(
+           title:'OOPS somethings wrong',
+           content: Row(
+             mainAxisAlignment: MainAxisAlignment.end,
+             children: [
+               FlatButton(onPressed: (){
+                 Get.back();
+               }, child: Text('Okey',style: TextStyle(color: Colors.red),)
+               )
+             ],
+           )
+       );
+     }finally{
+       setState(() {
+         _isLoading=false;
+       });}
+    }}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +104,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           IconButton(onPressed:()=>saveForm(), icon: Icon(Icons.save))
         ],
       ),
-      body:Padding(
+      body:_isLoading?Center(child: CircularProgressIndicator(),):Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _formkey,

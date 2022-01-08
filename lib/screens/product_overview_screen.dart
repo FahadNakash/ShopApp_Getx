@@ -20,6 +20,11 @@ class ProductOverViewScreen extends StatefulWidget {
 class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   final proController = ProductsController.productGetter;
   final cartController = CartController.cartGetter;
+  @override
+  void initState() {
+    proController.fetchProduct();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

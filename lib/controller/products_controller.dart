@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
 import 'package:get/get.dart';
 import '../model/product.dart';
@@ -37,41 +39,45 @@ static ProductsController get productGetter=>Get.find<ProductsController>();
     ),
   ].obs;
 
-
-
-
   Product findById(String? id){
     return loadedProducts.firstWhere((element) => element.id==id);
   }
-
   RxBool isFav=false.obs;
-
-
  List<Product> get favourieProductsList{
    if (isFav.value) {
      return loadedProducts.where((element) => element.isFavourite.value).toList();
    }
    return loadedProducts;
-
 }
 Future<void> addNewProduct(Product product)async{
-   final url =Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
-   final response=await http.post(url,body:json.encode({
-     'title':product.title,
-     'description':product.description,
-     'price':product.price,
-     'imageUrl':product.imgUrl,
-     'isFav':product.isFavourite.value,
-   }));
-   if (response.statusCode==200) {
-     print(json.decode(response.body)['name']);
-     final newProduct=Product(json.decode(response.body)['name'],product.title, product.description,product.price,product.imgUrl,);
-     print(newProduct.id);
-     loadedProducts.add(newProduct);
-     Get.back();
+   try {
+     final url = Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
+     final response = await http.post(url, body: json.encode({
+       'title': product.title,
+       'description': product.description,
+       'price': product.price,
+       'imageUrl': product.imgUrl,
+       'isFav': product.isFavourite.value,
+     }));
+       final newProduct = Product(json.decode(response.body)['name'], product.title, product.description, product.price, product.imgUrl,);
+       loadedProducts.add(newProduct);
+   }catch(error){
+     throw error;
    }
-
 }
+Future<void> fetchProduct()async{
+   try{
+     final url = Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
+     final response=await http.get(url);
+     print(json.decode(response.body));
+     final extractedData=json.decode(response.body) as Map<String,dynamic>;
+     print(extractedData);
+   }catch(error){
+     throw error;
+   }
+}
+
+
 void updateProduct(String id,Product product){
 int index=loadedProducts.indexWhere((element) => element.id==id);
 if (index>=0) {
