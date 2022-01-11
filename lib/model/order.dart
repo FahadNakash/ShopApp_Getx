@@ -1,4 +1,5 @@
 import '../model/cart.dart';
+
 class Order{
   late final String id;
   late final double price;
@@ -10,4 +11,19 @@ class Order{
     required this.product,
     required this.date
   });
+
+  Order.fromJson(Map<String,dynamic> json){
+    id=json['id'];
+    price=json['price'];
+    product=json['product'];
+    date=json['date'];
+  }
+
+  // Map<String,dynamic> toJson(){
+  //   return{
+  //     'id':id,
+  //     'price':price,
+  //     'product':product
+  //   }
+  // }
 }

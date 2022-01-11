@@ -10,21 +10,22 @@ class Product {
 
 
   Product.fromJson(Map<String, dynamic> json) {
-  id = json['id'];
-  title = json['title'];
-  description = json['description'];
-  price = json['price'];
-  imgUrl = json['imgUrl'];
-  isFavourite.value= json['isFavourite'];
+    id = json['id'];
+    title = json['title'];
+    description = json['description'];
+    price = json['price'];
+    imgUrl = json['imageUrl'];
+    isFavourite.value= json['isFav'];
   }
+
   Map<String, dynamic> toJson() {
   return {
-  'id': id,
-  'title': title,
-  'description': description,
-  'price': price,
-  'imgUrl': imgUrl,
-  };
-  }
-  }
+    'id': id,
+    'title': title,
+    'description': description,
+    'price': price,
+    'imageUrl': imgUrl,
+    'isFav':isFavourite.value,
+  };}
+}
 

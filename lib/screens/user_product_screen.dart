@@ -4,10 +4,9 @@ import 'package:shopapp_getx/model/product.dart';
 import '../widgets/user_product_items.dart';
 import '../controller/products_controller.dart';
 class UserProductScreen extends StatelessWidget {
-  const UserProductScreen({Key? key}) : super(key: key);
+  final proController = ProductsController.productGetter;
   @override
   Widget build(BuildContext context) {
-    final proController = ProductsController.productGetter;
     final List<Product> proData=proController.loadedProducts;
     return Scaffold(
       appBar: AppBar(

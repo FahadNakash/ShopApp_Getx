@@ -67,11 +67,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
     if(_editedProduct!.id!=null){
       _editedProduct!.isFavourite.value=_isFav;
-    proController.updateProduct(_editedProduct!.id!, _editedProduct!);
-      setState(() {
-        _isLoading=false;
-        Get.back();
-      });
+      await proController.updateProduct(_editedProduct!.id!, _editedProduct!);
     }else {
      try{
        await proController.addNewProduct(_editedProduct!);

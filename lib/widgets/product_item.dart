@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import '../model/product.dart';
 import 'package:get/get.dart';
 import '../controller/cart_controller.dart';
+import '../controller/products_controller.dart';
 
 class ProductItem extends StatelessWidget {
 final List<Product> data;
 final int index;
 ProductItem(this.data, this.index);
 final cartController=CartController.cartGetter;
+final proController=ProductsController.productGetter;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +32,9 @@ final cartController=CartController.cartGetter;
           child: GridTileBar(
             backgroundColor: Colors.black54,
             leading:IconButton(
-              onPressed: () {
-                data[index].isFavourite.value=!data[index].isFavourite.value;
+              onPressed: () async{
+                 // data[index].isFavourite.value=!data[index].isFavourite.value;
+                proController.isToggle(data,index);
               },
               icon: Obx(()=>Icon(
                 data[index].isFavourite.value?Icons.favorite:Icons.favorite_border_outlined,

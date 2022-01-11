@@ -11,6 +11,8 @@ class CartScreen extends StatefulWidget {
   State<CartScreen> createState() => _CartScreenState();
 }
 class _CartScreenState extends State<CartScreen> {
+  bool _isloading=false;
+
   @override
   Widget build(BuildContext context) {
     final cartController = CartController.cartGetter;
@@ -57,13 +59,19 @@ class _CartScreenState extends State<CartScreen> {
                     backgroundColor: Colors.purple,
                   ),
                   TextButton(
-                      onPressed: () {
-                        orderController.addOrder(cartObjects, cartController.totalPrice);
-                       // cartController.cartItems.clear(); // it cannot clear map,it throw an error so this not work
+                      onPressed: (cartController.totalPrice<=0 || _isloading)? null:() async{
+                        setState(() {
+                          _isloading=true;
+                        });
+                        await orderController.addOrder(cartObjects, cartController.totalPrice);
+                        // cartController.cartItems.clear(); // it cannot clear map,it throw an error so this not work
                         cartController.cartItems.value=<String,Cart>{}; // clear map
                         Get.toNamed('/order_screen');
+                        setState(() {
+                          _isloading=true;
+                        });
                       },
-                      child: Text(
+                      child:_isloading?CircularProgressIndicator(color: Colors.purple,): Text(
                         'Order Now',
                         style: TextStyle(
                             color: Colors.purple, fontWeight: FontWeight.bold),
