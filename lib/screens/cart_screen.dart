@@ -12,14 +12,13 @@ class CartScreen extends StatefulWidget {
 }
 class _CartScreenState extends State<CartScreen> {
   bool _isloading=false;
-
   @override
   Widget build(BuildContext context) {
     final cartController = CartController.cartGetter;
     final orderController = OrderController.orderGetter;
    // print(cartController.cartItems.value);
     final Map<String,Cart> cartData=cartController.cartItems.value as Map<String,Cart>;
-    print(cartData);
+
     // print(cartController.cartItems.value);
     final List<Cart> cartObjects =cartController.cartItems.value.values.toList() as List<Cart>;  //list of objects
     // cartController.cartItems.value.values.toList()//this line show error list<dynamic cannt assign List<Cart>
@@ -63,12 +62,29 @@ class _CartScreenState extends State<CartScreen> {
                         setState(() {
                           _isloading=true;
                         });
-                        await orderController.addOrder(cartObjects, cartController.totalPrice);
+                        try{await orderController.addOrder(cartObjects, cartController.totalPrice);}
+                        catch(error){
+                          return Get.defaultDialog(
+                              title: 'Alert',
+                              middleText: 'Oops Something Wrong...',
+                              actions: [
+                                FlatButton(
+                                    shape: StadiumBorder(),
+                                    color: Colors.green,
+                                    onPressed: (){
+                                      setState(() {
+                                        _isloading=false;
+                                      });
+                                      Get.back();
+                                    }, child: Text('Ok')),
+                              ]
+                          );
+                        }
                         // cartController.cartItems.clear(); // it cannot clear map,it throw an error so this not work
                         cartController.cartItems.value=<String,Cart>{}; // clear map
                         Get.toNamed('/order_screen');
                         setState(() {
-                          _isloading=true;
+                          _isloading=false;
                         });
                       },
                       child:_isloading?CircularProgressIndicator(color: Colors.purple,): Text(

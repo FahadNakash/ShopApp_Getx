@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shopapp_getx/model/product.dart';
 import '../controller/products_controller.dart';
 import '../constant/icon_text_button.dart';
 import '../controller/cart_controller.dart';
@@ -18,11 +17,6 @@ class ProductOverViewScreen extends StatefulWidget {
 class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   final proController = ProductsController.productGetter;
   final cartController = CartController.cartGetter;
-  @override
-  void initState() {
-    proController.fetchProduct();
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +59,15 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body:ProductGrid(),
+      body:FutureBuilder(
+        future: proController.fetchProduct(),
+        builder: (context,snapShot){
+          if (snapShot.connectionState==ConnectionState.waiting){
+            return Center(child: CircularProgressIndicator(color: Colors.purple,));
+          }
+           return ProductGrid();
+        },
+      ),
     );
   }
 }

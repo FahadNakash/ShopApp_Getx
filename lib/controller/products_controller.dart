@@ -51,7 +51,6 @@ static ProductsController get productGetter=>Get.find<ProductsController>();
     final response=await http.patch(url,body: json.encode({
       'isFav':product[index].isFavourite.value
     }));
-    print(json.decode(response.body));
   }
 
  List<Product> get favourieProductsList{
@@ -84,7 +83,7 @@ Future<void> fetchProduct()async{
       temp.addAll({'id': id});    //also add id in map
       // print('3 : $temp');
       loadedProducts.add(Product.fromJson(temp));
-      // print('4 :${loadedProducts.value}');  //list of objects
+      // print('4 :${loadedProducts.value}');   //list of objects
     });
      // loadedProducts.value=_loadedProduct;
      // print('1');
@@ -124,7 +123,6 @@ Future<void> deleteProduct(String id)async{
   final deleteProductIndex=loadedProducts.value.indexWhere((pro) => id==pro.id);
   var deleteProduct=loadedProducts.value[deleteProductIndex];
   final response=await http.delete(url);
-  print(response.statusCode);
   if (response.statusCode>=400) {
     throw HttpException('error');
   }

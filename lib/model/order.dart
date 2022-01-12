@@ -15,8 +15,8 @@ class Order{
   Order.fromJson(Map<String,dynamic> json){
     id=json['id'];
     price=json['price'];
-    product=json['product'];
-    date=json['date'];
+    product=(json['products'] as List<dynamic>).map((cartItems) =>Cart(id: cartItems['id'], title: cartItems['title'], price: cartItems['price'], quantity: cartItems['quantity'])).toList();
+    date=DateTime.parse(json['DateTime']);
   }
 
   // Map<String,dynamic> toJson(){

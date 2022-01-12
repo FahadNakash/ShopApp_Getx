@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopapp_getx/model/cart.dart';
-
 class CartController extends GetxController {
   static CartController get cartGetter => Get.find<CartController>();
   RxMap cartItems = <String, Cart>{}.obs;
