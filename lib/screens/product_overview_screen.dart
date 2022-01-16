@@ -6,6 +6,7 @@ import '../controller/cart_controller.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/product_grid.dart';
+import '../controller/auth_controller.dart';
 enum FilterOptions {
   IsFavorite,
   All,

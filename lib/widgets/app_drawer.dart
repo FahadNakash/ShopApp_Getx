@@ -36,6 +36,14 @@ class AppDrawer extends StatelessWidget {
               Get.toNamed('/user_product_screen');
             },
           ),
+          Divider(height: 1,thickness: 1,),
+          ListTile(
+            leading: Icon(Icons.card_travel),
+            title: Text('SignOut'),
+            onTap: (){
+              Get.toNamed('/auth_screen');
+            },
+          )
 
         ],
       ),
