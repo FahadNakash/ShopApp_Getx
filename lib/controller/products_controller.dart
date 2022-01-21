@@ -1,11 +1,16 @@
 import 'dart:convert';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:shopapp_getx/helper_functions/custom_exception.dart';
 import '../model/product.dart';
-class ProductsController extends GetxController{
-static ProductsController get productGetter=>Get.find<ProductsController>();
- final loadedProducts=<Product>[].obs;
+import '../controller/auth_controller.dart';
+
+class ProductsController extends GetxController {
+  static ProductsController get productGetter => Get.find<ProductsController>();
+  final authController = AuthController.authGetter;
+  final loadedProducts = <Product>[].obs;
+  List<Product> favProduct=[];
+
   //  List<Product> loadedProducts =[
   //   Product(
   //     'p1',
@@ -37,30 +42,33 @@ static ProductsController get productGetter=>Get.find<ProductsController>();
   //   ),
   // ].obs;
 
-
-   //find by id
-  Product findById(String? id){
-    return loadedProducts.firstWhere((element) => element.id==id);
-  }
- //isFav status
-  RxBool isFav=false.obs;
-
-  Future<void>  isToggle(List<Product> product,int index)async{
-    product[index].isFavourite.value=!product[index].isFavourite.value;
-    var url=Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products/${product[index].id}.json');
-    final response=await http.patch(url,body: json.encode({
-      'isFav':product[index].isFavourite.value
-    }));
+  //find by id
+  Product findById(String? id) {
+    return loadedProducts.firstWhere((element) => element.id == id);
   }
 
- List<Product> get favourieProductsList{
-   if (isFav.value) {
-     return loadedProducts.where((element) => element.isFavourite.value).toList();
-   }
-   return loadedProducts;
-}
+  //isFav status
+  RxBool isFav = false.obs;
+
+  List<Product> get favourieProductsList{
+    if (isFav.value){
+      favProduct.clear();
+      favProduct.addAll(loadedProducts.where((element) =>element.isFavourite.value));
+      return favProduct;
+    }
+    return loadedProducts;
+  }
+
+  Future<void> isToggle(List<Product> product,int index)async{
+     product[index].isFavourite.value=!product[index].isFavourite.value;
+     var url=Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/favProducts/${authController.user.value!.uid}/${product[index].id}.json');
+     final response=await http.put(url,body: json.encode(
+      product[index].isFavourite.value,
+    ));
+  }
+
 // add new product
-Future<void> addNewProduct(Product product)async{
+  Future<void> addNewProduct(Product product)async{
    try {
      final url = Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
      final response = await http.post(url, body: json.encode(product.toJson()));
@@ -70,63 +78,86 @@ Future<void> addNewProduct(Product product)async{
      throw error;
    }
 }
+
+
 //fetch new product
-Future<void> fetchProduct()async{
+  Future<void> fetchProduct() async{
      final url = Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
      final response=await http.get(url);
      final Map<String,dynamic> extractedData=json.decode(response.body);
-     // print('1 :${extractedData}');
+    // print(extractedData);
+     final url1 = Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/favProducts/${authController.user.value!.uid}.json');
+     final response1=await http.get(url1);
+     final Map<String,dynamic> extractedFavData=json.decode(response1.body);
+    // print(extractedFavData);
      loadedProducts.clear();
      extractedData.keys.forEach((id) {
       Map<String ,dynamic> temp=extractedData[id]; //fetch object by id and get complete object
-      // print('2: $temp');
       temp.addAll({'id': id});    //also add id in map
-      // print('3 : $temp');
+      if (extractedFavData.containsKey(id)) {
+        extractedFavData.keys.forEach((element) {
+          temp.addAll({'isFav':extractedFavData[id]});
+
+        });
+      }
       loadedProducts.add(Product.fromJson(temp));
-      // print('4 :${loadedProducts.value}');   //list of objects
+      print('4 :${loadedProducts.value}');   //list of objects
     });
-     // loadedProducts.value=_loadedProduct;
-     // print('1');
-     // print(extractedData);
-     //
-     // print('2');
-     // extractedData.forEach((prodID, proData) {
-     //   _loadedProduct.add(Product(
-     //     prodID,
-     //     proData['description']!,
-     //     proData['ImageUrl']!,
-     //     proData['price']!,
-     //     proData['title']!,
-     //   ));
-     //
-     // });
-}
 
-Future<void> updateProduct(String id,Product product)async{
-int index=loadedProducts.indexWhere((element) => element.id==id);
-if (index>=0) {
-  final url = Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json');
-  final response=await http.patch(url,body: json.encode({
-    'title':product.title,
-    'description':product.description,
-    'imageUrl':product.imgUrl,
-    'price':product.price,
-  }));
-  loadedProducts[index]=product;
-  Get.back();
-}else{
-  print('no found');
-}}
-
-Future<void> deleteProduct(String id)async{
-  final url = Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json');
-  final deleteProductIndex=loadedProducts.value.indexWhere((pro) => id==pro.id);
-  var deleteProduct=loadedProducts.value[deleteProductIndex];
-  final response=await http.delete(url);
-  if (response.statusCode>=400) {
-    throw HttpException('error');
   }
-  loadedProducts.remove(deleteProduct);
 
-}
+
+  Future<void> updateProduct(String id, Product product) async {
+    int index = loadedProducts.indexWhere((element) => element.id == id);
+    if (index >= 0) {
+      final url = Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json');
+      final response = await http.patch(url,
+          body: json.encode({
+            'title': product.title,
+            'description': product.description,
+            'imageUrl': product.imgUrl,
+            'price': product.price,
+          }));
+      loadedProducts[index] = product;
+      Get.back();
+    } else {
+      print('no found');
+    }
+  }
+
+
+  Future<void> deleteProduct(String id) async {
+    final url = Uri.parse(
+        'https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json');
+    final deleteProductIndex =
+        loadedProducts.value.indexWhere((pro) => id == pro.id);
+    var deleteProduct = loadedProducts.value[deleteProductIndex];
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      throw HttpException('error');
+    }
+    loadedProducts.remove(deleteProduct);
+  }
+
+  // bottomSheet() {
+  //   Get.bottomSheet(
+  //     Container(
+  //       child: Wrap(
+  //         children: [
+  //           ListTile(
+  //             title: Text('DarkTime'),
+  //             onTap: () => {Get.changeTheme(ThemeData.dark())},
+  //           ),
+  //           ListTile(
+  //             title: Text('LightTheme'),
+  //             onTap: () {
+  //               Get.changeTheme(ThemeData.light());
+  //             },
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //     backgroundColor: Colors.purple,
+  //   );
+  // }
 }

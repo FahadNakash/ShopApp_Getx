@@ -94,6 +94,7 @@ class _AuthCardState extends State<AuthCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
   final authController=AuthController.authGetter;
+  bool _obscure=false;
   Map<String, String> _authData = {
     'email': '',
     'password': '',
@@ -193,8 +194,10 @@ class _AuthCardState extends State<AuthCard> {
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Password'),
-                  obscureText: true,
+                  decoration: InputDecoration(labelText: 'Password',suffix: IconButton(icon:_obscure?Icon(Icons.remove_red_eye_outlined):Icon(Icons.remove_red_eye),onPressed: (){setState(() {
+                    _obscure=!_obscure;
+                  });},)),
+                  obscureText: _obscure,
                   controller: _passwordController,
                   validator: (value) {
                     if (value!.isEmpty || value.length < 5) {

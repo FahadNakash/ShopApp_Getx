@@ -22,7 +22,6 @@ Future<void> main()async {
   Get.put(CartController());
   Get.put(ProductsController());
   Get.put(OrderController());
-  Get.lazyPut(() => AuthController());
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {
@@ -48,7 +47,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/order_screen', page: ()=>OrderScreen()),
         GetPage(name: '/user_product_screen', page:()=>UserProductScreen()),
         GetPage(name: '/edit_product_screen', page:()=>EditProductScreen()),
-        GetPage(name: '/auth_screen', page:()=>AuthScreen())
+        GetPage(name: '/auth_screen', page:()=>AuthScreen(),transition: Transition.leftToRight),
       ],
     );
   }

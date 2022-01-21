@@ -10,6 +10,7 @@ import '../controller/auth_controller.dart';
 enum FilterOptions {
   IsFavorite,
   All,
+  Theme,
 }
 class ProductOverViewScreen extends StatefulWidget {
   @override
@@ -18,11 +19,13 @@ class ProductOverViewScreen extends StatefulWidget {
 class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   final proController = ProductsController.productGetter;
   final cartController = CartController.cartGetter;
+  final authController=AuthController.authGetter;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('HomeScreen'),
+        title: Text('${authController.user.value!.email}'),
         actions: [
           Obx(
             () => TextIconButton(
@@ -43,16 +46,23 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
                 child: Text('All'),
                 value: FilterOptions.All,
               ),
+              PopupMenuItem(
+                child: Text('Theme'),
+                value: FilterOptions.Theme,
+              ),
             ],
             onSelected: (FilterOptions value) {
               if (value == FilterOptions.IsFavorite) {
                setState(() {
                  proController.isFav.value=true;
+                 print(proController.isFav.value);
                });
-              } else {
-               setState(() {
-                 proController.isFav.value=false;
-               });
+              } else if (value==FilterOptions.All) {
+                setState(() {
+                  proController.isFav.value = false;
+                  print(proController.isFav.value);
+
+                });
               }
             },
             icon: Icon(Icons.more_vert),

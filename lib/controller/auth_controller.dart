@@ -83,7 +83,6 @@ class AuthController extends GetxController{
     //triggle whenever userchanges appear
     ever(user, _initialScreen);
   }
-  
   _initialScreen(User? user){
     if (user==null) {
       Get.offAll(()=>AuthScreen());
@@ -120,9 +119,10 @@ class AuthController extends GetxController{
 
 
   }
-  Future<void> signOut(String email,String password)async{
+  Future<void> logOut()async{
     try{
       await _auth.signOut();
+      user.value=null;
     }catch(error){
       Get.snackbar('Alert', error.toString(),duration: Duration(seconds: 1));
     }

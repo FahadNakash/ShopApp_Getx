@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:shopapp_getx/helper_functions/custom_exception.dart';
 import 'package:shopapp_getx/model/product.dart';
@@ -7,15 +6,18 @@ import '../model/order.dart';
 import '../model/cart.dart';
 import 'package:http/http.dart' as http;
 
+import 'auth_controller.dart';
 class OrderController extends GetxController {
+  final authController=AuthController.authGetter;
   RxList orderItems = <Order>[].obs;
-  RxBool isExpandable = false.obs;
 
+  RxBool isExpandable = false.obs;
   static OrderController get orderGetter => Get.find<OrderController>();
+
 
   Future<void> addOrder(List<Cart> cartItems, double price) async {
     try {
-      var url=Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/Order.json');
+      var url=Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/Order/${authController.user.value!.uid}.json');
       final timeStamp=DateTime.now();
       final response= await http.post(url,body: json.encode({
         'id':timeStamp.toIso8601String(),
@@ -40,7 +42,7 @@ class OrderController extends GetxController {
   
   Future<void> fetchOrder()async{
   try{
-    var url =Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/Order.json');
+    var url =Uri.parse('https://shopapp-getx-default-rtdb.asia-southeast1.firebasedatabase.app/Order/${authController.user.value!.uid}.json');
     final response=await http.get(url);
     final extractedData=json.decode(response.body) as Map<String,dynamic>;
     orderItems.clear();
