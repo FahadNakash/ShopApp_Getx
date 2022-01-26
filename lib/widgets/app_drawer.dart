@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controller/auth_controller.dart';
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+  final authController =AuthController.authGetter;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -36,6 +37,14 @@ class AppDrawer extends StatelessWidget {
               Get.toNamed('/user_product_screen');
             },
           ),
+          Divider(height: 1,thickness: 1,),
+          ListTile(
+            leading: Icon(Icons.card_travel),
+            title: Text('SignOut'),
+            onTap: (){
+              authController.logOut();
+            },
+          )
 
         ],
       ),
